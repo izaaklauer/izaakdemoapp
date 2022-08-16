@@ -5,24 +5,18 @@ app "izaakdemoapp" {
   build {
     use "docker" {}
     registry {
-      use "docker" {
-        image = "ttl.sh/izaakprodapp-longobscurestring"
-        tag        = "1h"
+       use "aws-ecr" {
+        region     = "us-east-1"
+        repository = "waypoint-example"
+        tag        = "latest"
       }
     }
   }
 
   deploy {
-    use "kubernetes" {
-      probe_path = "/"
-    }
-  }
-
-  release {
-    use "kubernetes" {
-      // Sets up a load balancer to access released application
-      load_balancer = true
-      port          = 3000
+    use "aws-ecs" {
+      region = "us-east-1"
+      memory = "512"
     }
   }
 }
